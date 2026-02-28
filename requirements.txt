@@ -1,0 +1,14 @@
+streamlit
+pandas
+numpy
+scikit-learn
+xgboost
+shap
+matplotlib
+plotly
+sqlalchemy
+python-dateutil
+cryptography
+pytesseract
+pdf2image
+Pillow
