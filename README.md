@@ -9,6 +9,7 @@ Advanced student-ready healthcare AI project that:
 - Trains risk models (anemia, cardiovascular, infection).
 - Provides Explainable AI notes via SHAP.
 - Includes a Streamlit dashboard, SQLite storage, and local encryption.
+- Supports synthetic multi-report patient histories and downloadable plain-text summaries.
 
 ## Run
 

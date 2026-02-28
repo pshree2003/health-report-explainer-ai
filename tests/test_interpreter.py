@@ -34,3 +34,12 @@ def test_parse_report_text_extracts_patient_and_metrics():
     assert parsed.iloc[0]["Patient_ID"] == "P-909"
     assert parsed.iloc[0]["Gender"] == "Female"
     assert float(parsed.iloc[0]["Hemoglobin"]) == 11.2
+
+
+def test_synthetic_data_contains_patient_histories():
+    from src.synthetic_data import generate_synthetic_dataset
+
+    df = generate_synthetic_dataset(200, seed=7)
+    counts = df["Patient_ID"].value_counts()
+    assert counts.max() >= 2
+    assert df["Test_Date"].is_monotonic_increasing is False

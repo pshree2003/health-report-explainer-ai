@@ -21,7 +21,10 @@ with st.sidebar:
     use_synthetic = st.checkbox("Use synthetic demo dataset", value=True)
 
 if use_synthetic:
-    df = generate_synthetic_dataset(600)
+    synthetic_all = generate_synthetic_dataset(600)
+    patient_options = sorted(synthetic_all["Patient_ID"].unique().tolist())
+    selected_patient = st.sidebar.selectbox("Synthetic patient", patient_options, index=0)
+    df = synthetic_all[synthetic_all["Patient_ID"] == selected_patient].copy()
 else:
     upload = st.file_uploader("Upload report (txt, pdf, png, jpg)", type=["txt", "pdf", "png", "jpg", "jpeg"])
     if upload:
@@ -64,6 +67,27 @@ if not df.empty:
         st.markdown("**Diet / lifestyle suggestions**")
         for tip in insight.diet_tips:
             st.write(f"- {tip}")
+
+        summary_lines = [
+            f"Patient: {latest.get('Patient_ID', 'Unknown')}",
+            f"Date: {latest.get('Test_Date', 'Unknown')}",
+            f"Severity Score: {insight.severity_score}/100",
+            f"Anemia Risk: {insight.anemia_risk:.0%}",
+            f"Cardio Risk: {insight.cardio_risk:.0%}",
+            f"Infection Risk: {insight.infection_risk:.0%}",
+            "",
+            "Explanation:",
+            insight.narrative,
+            "",
+            "Suggestions:",
+            *[f"- {tip}" for tip in insight.diet_tips],
+        ]
+        st.download_button(
+            "Download patient-friendly summary",
+            data="\n".join(summary_lines),
+            file_name="health_summary.txt",
+            mime="text/plain",
+        )
 
     with col2:
         st.metric("Severity Score", f"{insight.severity_score}/100")
